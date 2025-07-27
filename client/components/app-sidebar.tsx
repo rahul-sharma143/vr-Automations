@@ -42,6 +42,7 @@ const menuItems = [
   { title: "Charts", url: "/dashboard/charts", icon: BarChart3 },
 ];
 
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE;
 export function AppSidebar() {
   const pathname = usePathname();
   const router = useRouter();
@@ -62,7 +63,7 @@ export function AppSidebar() {
 
     const fetchUser = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/users/me", {
+        const res = await fetch(`${API_BASE}/users/me`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 

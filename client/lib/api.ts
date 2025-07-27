@@ -22,6 +22,29 @@ export interface HistoryData {
   timestamp: string;
   data: CryptoCurrency[];
 }
+export interface UserSignup {
+  name: string;
+  email: string;
+  password: string;
+}
+export interface UserLogin {
+  email: string;
+  password: string;
+}
+
+export interface UserResponse {
+  token: string;
+  ok: boolean;
+  message: string;
+}
+export const signup = async (user: UserSignup): Promise<UserResponse> => {
+  const res = await axios.post<UserResponse>(`${API_BASE}/users`, user);
+  return res.data;
+};
+export const login = async (user: UserLogin): Promise<UserResponse> => {
+  const res = await axios.post<UserResponse>(`${API_BASE}/users/login`, user);
+  return res.data;
+};
 
 export const getCoins = async (): Promise<CryptoCurrency[]> => {
   const res = await axios.get<CryptoCurrency[]>(`${API_BASE}/coins`);

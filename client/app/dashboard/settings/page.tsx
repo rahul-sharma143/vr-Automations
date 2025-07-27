@@ -17,6 +17,7 @@ import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { User, Bell, Shield, Palette } from "lucide-react";
 import { useTheme } from "next-themes";
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE;
 
 export default function SettingsPage() {
   const router = useRouter();
@@ -40,7 +41,7 @@ export default function SettingsPage() {
 
     const fetchUser = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/users/me", {
+        const res = await fetch(`${API_BASE}/users/me`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

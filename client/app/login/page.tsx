@@ -16,6 +16,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { TrendingUp, Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
 import Link from "next/link";
+import { login } from "@/lib/api";
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE;
 
 export default function LoginPage() {
@@ -32,23 +33,20 @@ export default function LoginPage() {
     setError("");
 
     try {
-      const response = await fetch(`${API_BASE}/users/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
+      const response = await login({
+        email,
+        password,
       });
-
-      const data = await response.json();
+      console.log("Login response", response);
 
       if (!response.ok) {
-        throw new Error(data.message || "Failed to log in");
-      }
-      localStorage.setItem("token", data.token);
-
+        throw new Error(response.message || "Failed to log in");
+      } else {
+        localStorage.setItem("token", response.token);
       toast.success("Logged in successfully!");
       router.push("/dashboard");
+      }
+      
     } catch (err: any) {
       const errorMsg = err.message || "An error occurred. Please try again.";
       setError(errorMsg);

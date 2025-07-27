@@ -17,6 +17,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { TrendingUp, Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
 import Link from "next/link";
+import { signup } from "@/lib/api";
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE;
 
 export default function SignupPage() {
@@ -59,24 +60,21 @@ export default function SignupPage() {
     }
 
     try {
-      const response = await fetch(`${API_BASE}/users`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ name, email, password }),
+      const response = await signup({
+        name,
+        email,
+        password,
       });
-
-      const data = await response.json();
+console.log("Signup response", response);
 
       if (!response.ok) {
-        throw new Error(data.message || "Failed to create account");
-      }
-
-      localStorage.setItem("token", data.token);
-
+        throw new Error(response.message || "Failed to create account");
+      } else {
+      localStorage.setItem("token", response.token);
       toast.success("Account created successfully!");
       router.push("/dashboard");
+      }
+
     } catch (error: any) {
       const errorMsg = error.message || "An error occurred. Please try again.";
       setError(errorMsg);
